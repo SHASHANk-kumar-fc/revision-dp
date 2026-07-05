@@ -1,0 +1,33 @@
+class Solution {
+    public List<Integer> largestDivisibleSubset(int[] nums) {
+        Arrays.sort(nums);
+        List<Integer>ans= new ArrayList<>();
+        int dp[]=new int[nums.length];
+        int hash[]=new int[nums.length];
+        for(int i=0;i<nums.length;i++)hash[i]=i;
+        Arrays.fill(dp,1);
+        int count,max=1;
+        for(int i=1;i<nums.length;i++){
+            count=1;
+            for(int j=0;j<i;j++){
+                 if(nums[i]%nums[j]==0)
+                  if(count<dp[i]+dp[j]){
+                    hash[i]=j;
+                    count=dp[i]+dp[j];
+                  }
+            }dp[i]=count;
+        }
+        int index=0;
+        for(int i=0;i<nums.length;i++){
+            if(max<dp[i]){
+                max=dp[i];
+                index=i;
+            }
+        }
+        while(hash[index] != index){  
+          ans.add(nums[index]);
+          index=hash[index];
+        }ans.add(nums[index]);
+        return ans;
+    }
+}   
