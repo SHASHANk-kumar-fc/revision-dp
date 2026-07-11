@@ -1,0 +1,20 @@
+class Solution {
+    public int minCost(int n, int[] arr) {
+        int ans[]=new int [arr.length+2];
+        ans[0]=0;ans[ans.length-1]=n;
+        for(int i=0;i<arr.length;i++)ans[i+1]=arr[i];
+        Arrays.sort(ans);
+        int dp[][]=new int[ans.length][ans.length];
+        for(int i=0;i<ans.length;i++)Arrays.fill(dp[i],-1);
+        return fun(ans,1,ans.length-2,dp);
+    }static int fun(int []ans,int i,int j,int [][]dp){
+        if(i>j)return 0;
+        if(dp[i][j]!=-1)return dp[i][j];
+        int step=Integer.MAX_VALUE;
+        for(int k=i;k<=j;k++){
+            step=Math.min(step,ans[j+1]-ans[i-1]+
+            fun(ans,i,k-1,dp)+
+            fun(ans,k+1,j,dp));
+        }return dp[i][j]=step;
+    }
+}
