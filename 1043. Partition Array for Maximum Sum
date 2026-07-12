@@ -1,0 +1,20 @@
+class Solution {
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int dp[]=new int[arr.length];Arrays.fill(dp,-1);
+      return rec(arr,0,k,dp)  ;
+    }static int rec(int []arr,int i,int val,int []dp){
+       if(i==arr.length)return 0;
+       int step=Integer.MIN_VALUE;
+       if(dp[i]!=-1)return dp[i];
+        for(int index=0;index<val;index++){
+            if(i+index<arr.length)
+              step=Math.max(step,findMax(i,i+index,arr)*(index+1)+rec(arr,index+i+1,val,dp));
+        
+       }return dp[i] =step;
+    }static int findMax(int i,int j,int []arr){
+        int max=Integer.MIN_VALUE;
+        while(i<=j){
+            max=Math.max(max,arr[i++]);
+        }return max;
+    }
+}
