@@ -1,0 +1,37 @@
+class Solution {
+    public int minCut(String s) {
+        int n = s.length();
+        boolean[][] isPalin = new boolean[n][n];
+
+        // Build palindrome table: fill by increasing substring length
+        for (int i = 0; i < n; i++) isPalin[i][i] = true; // single char
+
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+                if (s.charAt(i) != s.charAt(j)) {
+                    isPalin[i][j] = false;
+                } else {
+                    // len==2 → no inner substring to check, treat as true
+                    isPalin[i][j] = (len == 2) || isPalin[i + 1][j - 1];
+                }
+            }
+        }
+
+        int dp[][] = new int[n][n];
+        for (int i = 0; i < n; i++) Arrays.fill(dp[i], -1);
+        return rec(dp, isPalin, 0, n - 1);
+    }
+
+    static int rec(int[][] dp, boolean[][] isPalin, int i, int j) {
+        if (i >= j) return 0;
+        if (dp[i][j] != -1) return dp[i][j];
+        if (isPalin[i][j]) return dp[i][j] = 0;
+
+        int take = Integer.MAX_VALUE;
+        for (int k = i; k <= j - 1; k++) {
+            take = Math.min(take, 1 + rec(dp, isPalin, i, k) + rec(dp, isPalin, k + 1, j));
+        }
+        return dp[i][j] = take;
+    }
+}
