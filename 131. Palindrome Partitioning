@@ -1,0 +1,36 @@
+class Solution {
+    public List<List<String>> partition(String s) {
+     int n = s.length();
+    boolean[][] isPalin = new boolean[n][n];
+    for (int i = 0; i < n; i++) isPalin[i][i] = true; // single char
+
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+                if (s.charAt(i) != s.charAt(j)) {
+                    isPalin[i][j] = false;
+                } else {
+                    // len==2 → no inner substring to check, treat as true
+                    isPalin[i][j] = (len == 2) || isPalin[i + 1][j - 1];
+                }
+            }
+        }
+        List<List<String>>ans=new ArrayList<>();
+        rec(ans,isPalin,new ArrayList<>(),s,0);
+    return ans;
+    }static void rec(List<List<String>>ans,boolean[][] isPalin,List<String>temp,String s,int i){
+        if(i==s.length())ans.add(new ArrayList<>(temp));
+        
+         for(int k=i;k<s.length();k++){
+
+            if(isPalin[i][k]){
+
+                temp.add(s.substring(i,k+1));
+
+                rec(ans,isPalin,temp,s,k+1);
+
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
+}
