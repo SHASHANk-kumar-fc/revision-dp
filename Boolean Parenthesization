@@ -1,0 +1,43 @@
+class Solution {
+    static int countWays(String s) {
+        int dp[][][]=new int [s.length()][s.length()][2];
+        for(int i=0;i<s.length();i++){
+            for(int j=0;j<s.length();j++)
+            Arrays.fill(dp[i][j],-1);
+        }
+      return rec(s,0,s.length()-1,1,dp)  ;
+        
+}static int rec(String s,int i,int j,int t,int [][][]dp){
+    if(i>j)return 0;
+    if(i==j){
+        if(t==1){
+            return s.charAt(i)=='T'?1:0;
+        }else return s.charAt(i)=='F'?1:0;
+    }
+    if( dp[i][j][t]!=-1)return  dp[i][j][t];
+    int ways=0;
+    for(int k=i+1;k<j;k+=2){
+        int lT=rec(s,i,k-1,1,dp);
+        int lF=rec(s,i,k-1,0,dp);
+        int rT=rec(s,k+1,j,1,dp);
+        int rF=rec(s,k+1,j,0,dp);  
+        if(s.charAt(k)=='&'){
+           if(t==1) ways+=(rT*lT);
+           else {
+    ways += lT*rF + lF*rT + lF*rF;
+}
+        }else if(s.charAt(k)=='^'){
+            if(t==1)
+            ways+=(lT*rF+lF*rT);
+            else ways+=(lT*rT+lF*rF);
+        }else{
+        if(t==1)
+        ways += lT*rT + lT*rF + lF*rT;
+    else
+        ways += lF*rF;
+        }
+    }return dp[i][j][t]= ways;
+    
+   
+}
+}
